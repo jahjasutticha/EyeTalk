@@ -1,0 +1,29 @@
+[
+    {
+        "name": "ศรัณย์พร อยู่สุข",
+        "age": 17,
+        "gender": "female",
+        "condition": "อัมพาต",
+        "caretakerPhone": "0996874286",
+        "email": "noonsarun.2552@gmail.com",
+        "password": "09052552"
+    },
+    {
+        "name": "สุทธิชา ศรีเมือง",
+        "age": 17,
+        "gender": "female",
+        "condition": "ALS",
+        "caretakerPhone": "0650058954",
+        "email": "jahjasutticha@gmail.com",
+        "password": "pdizz_9307"
+    },
+    {
+        "name": "Yyy",
+        "age": 18,
+        "gender": "male",
+        "condition": "ทดลอง",
+        "caretakerPhone": "0924368178",
+        "email": "34272@apw.ac.th",
+        "password": "QASDFGHJKL"
+    }
+]

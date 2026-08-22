@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EyeTalk — ระบบสื่อสารด้วยดวงตา</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ================= BACKGROUND SCAN LAYER ================= -->
+<div class="scan-field" aria-hidden="true">
+  <div class="scan-ring ring-a"></div>
+  <div class="scan-ring ring-b"></div>
+  <div class="scan-ring ring-c"></div>
+</div>
+
+<!-- ================= TOAST ================= -->
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<!-- ============================================================ -->
+<!-- PAGE: LOGIN                                                   -->
+<!-- ============================================================ -->
+<main id="page-login" class="page page-auth active">
+  <section class="auth-card">
+    <div class="brand">
+      <svg class="brand-mark" viewBox="0 0 64 64" aria-hidden="true">
+        <ellipse cx="32" cy="32" rx="28" ry="16" class="brand-lid"/>
+        <circle cx="32" cy="32" r="11" class="brand-iris"/>
+        <circle cx="32" cy="32" r="4.2" class="brand-pupil"/>
+        <circle cx="27" cy="27" r="2" class="brand-glint"/>
+      </svg>
+      <div class="brand-text">
+        <h1>EyeTalk</h1>
+        <p>การสื่อสารเริ่มต้นที่สายตา</p>
+      </div>
+    </div>
+
+    <form id="login-form" class="auth-form" novalidate>
+      <label class="field">
+        <span class="field-label">อีเมล</span>
+        <input type="email" id="login-email" placeholder="name@example.com" required autocomplete="email">
+      </label>
+      <label class="field">
+        <span class="field-label">รหัสผ่าน</span>
+        <input type="password" id="login-password" placeholder="••••••••" required autocomplete="current-password">
+      </label>
+      <p id="login-error" class="form-error" aria-live="polite"></p>
+      <button type="submit" class="btn btn-primary btn-block">
+        <span>เข้าสู่ระบบ</span>
+        <svg viewBox="0 0 24 24" class="btn-icon"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </form>
+
+    <div class="auth-switch">
+      <span>ยังไม่มีบัญชีใช่ไหม?</span>
+      <button type="button" id="go-register" class="link-btn">สมัครสมาชิก</button>
+    </div>
+  </section>
+</main>
+
+<!-- ============================================================ -->
+<!-- PAGE: REGISTER                                                -->
+<!-- ============================================================ -->
+<main id="page-register" class="page page-auth">
+  <section class="auth-card auth-card-wide">
+    <div class="brand brand-compact">
+      <svg class="brand-mark" viewBox="0 0 64 64" aria-hidden="true">
+        <ellipse cx="32" cy="32" rx="28" ry="16" class="brand-lid"/>
+        <circle cx="32" cy="32" r="11" class="brand-iris"/>
+        <circle cx="32" cy="32" r="4.2" class="brand-pupil"/>
+        <circle cx="27" cy="27" r="2" class="brand-glint"/>
+      </svg>
+      <div class="brand-text">
+        <h1>สร้างบัญชีผู้ใช้</h1>
+        <p>กรอกข้อมูลเพื่อเริ่มต้นใช้งาน EyeTalk</p>
+      </div>
+    </div>
+
+    <form id="register-form" class="auth-form auth-form-grid" novalidate>
+      <label class="field">
+        <span class="field-label">ชื่อ-นามสกุล</span>
+        <input type="text" id="reg-name" required>
+      </label>
+      <label class="field">
+        <span class="field-label">อายุ</span>
+        <input type="number" id="reg-age" min="0" max="120" required>
+      </label>
+      <label class="field">
+        <span class="field-label">เพศ</span>
+        <select id="reg-gender" required>
+          <option value="" disabled selected>เลือกเพศ</option>
+          <option value="male">ชาย</option>
+          <option value="female">หญิง</option>
+          <option value="other">อื่น ๆ</option>
+        </select>
+      </label>
+      <label class="field">
+        <span class="field-label">โรคหรือภาวะของผู้ป่วย</span>
+        <input type="text" id="reg-condition" placeholder="เช่น ALS, อัมพาต, ผู้ป่วย ICU" required>
+      </label>
+      <label class="field">
+        <span class="field-label">เบอร์โทรศัพท์ผู้ดูแล</span>
+        <input type="tel" id="reg-caretaker-phone" placeholder="08x-xxx-xxxx" required>
+      </label>
+      <label class="field">
+        <span class="field-label">อีเมล</span>
+        <input type="email" id="reg-email" required>
+      </label>
+      <label class="field field-span">
+        <span class="field-label">รหัสผ่าน</span>
+        <input type="password" id="reg-password" required>
+      </label>
+      <p id="register-error" class="form-error field-span" aria-live="polite"></p>
+      <button type="submit" class="btn btn-primary btn-block field-span">
+        <span>สมัครสมาชิก</span>
+      </button>
+    </form>
+
+    <div class="auth-switch">
+      <span>มีบัญชีอยู่แล้วใช่ไหม?</span>
+      <button type="button" id="go-login" class="link-btn">เข้าสู่ระบบ</button>
+    </div>
+  </section>
+</main>
+<!-- ========================================================= -->
+<!-- PAGE: EYE CALIBRATION -->
+<!-- ========================================================= -->
+
+<main id="page-calibration" class="page page-calibration">
+
+  <section class="calibration-card">
+
+    <h1>ปรับเทียบการมอง</h1>
+
+    <p id="calibration-instruction">
+      กรุณามองตามจุดที่ปรากฏบนหน้าจอ
+    </p>
+
+    <div class="calibration-area">
+
+      <div id="calibration-left" class="calibration-point calibration-left">
+        ●
+      </div>
+
+      <div id="calibration-center" class="calibration-point calibration-center">
+        ●
+      </div>
+
+      <div id="calibration-right" class="calibration-point calibration-right">
+        ●
+      </div>
+
+    </div>
+
+    <div class="calibration-status">
+      <span id="calibration-status">
+        กดเริ่มเพื่อปรับเทียบสายตา
+      </span>
+    </div>
+
+    <button type="button" id="btn-start-calibration" class="btn btn-primary">
+      เริ่มปรับเทียบสายตา
+    </button>
+
+  </section>
+
+</main>
+<!-- ============================================================ -->
+<!-- PAGE: DASHBOARD                                               -->
+<!-- ============================================================ -->
+<main id="page-dashboard" class="page page-dashboard">
+
+  <!-- ============ HEADER ============ -->
+  <header class="topbar">
+    <div class="topbar-brand">
+      <svg class="brand-mark brand-mark-sm" viewBox="0 0 64 64" aria-hidden="true">
+        <ellipse cx="32" cy="32" rx="28" ry="16" class="brand-lid"/>
+        <circle cx="32" cy="32" r="11" class="brand-iris"/>
+        <circle cx="32" cy="32" r="4.2" class="brand-pupil"/>
+        <circle cx="27" cy="27" r="2" class="brand-glint"/>
+      </svg>
+      <span class="topbar-title">EyeTalk</span>
+    </div>
+
+    <div class="topbar-user">
+      <span id="topbar-username" class="topbar-username">ผู้ใช้งาน</span>
+    </div>
+
+    <div class="topbar-status" id="status-row">
+      <span class="status-pill" id="status-camera"><i class="dot"></i>Camera Connected</span>
+      <span class="status-pill" id="status-eye"><i class="dot"></i>Eye Tracking Ready</span>
+      <span class="status-pill" id="status-ai"><i class="dot"></i>AI Ready</span>
+    </div>
+
+    <button type="button" id="logout-btn" class="btn btn-ghost">
+      <svg viewBox="0 0 24 24" class="btn-icon"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>ออกจากระบบ</span>
+    </button>
+  </header>
+
+  <!-- ============ MAIN GRID ============ -->
+  <div class="dashboard-grid">
+
+    <!-- ===== CENTER: message builder + categories ===== -->
+    <section class="panel panel-main">
+
+      <div class="message-box" >
+        <div class="message-box-head">
+          <h2>ข้อความที่กำลังสร้าง</h2>
+          <div class="gaze-progress">
+            <span class="gaze-progress-label">Eye Focus Progress</span>
+            <div class="progress-track">
+              <div id="gaze-progress-fill" class="progress-fill" style="width:0%"></div>
+            </div>
+            <span id="gaze-progress-value" class="gaze-progress-value">0%</span>
+          </div>
+        </div>
+
+        <p id="message-output" class="message-output" aria-live="polite">
+          <span class="message-placeholder">เลือกคำจากหมวดด้านล่างเพื่อเริ่มสร้างประโยค...</span>
+        </p>
+        <div class="prediction-area">
+  <span class="prediction-label">คำแนะนำถัดไป</span>
+
+  <div id="prediction-list" class="prediction-list"></div>
+</div>
+
+        <div class="message-actions">
+          <button type="button" id="btn-speak" class="btn btn-accent">
+            <svg viewBox="0 0 24 24" class="btn-icon"><path d="M11 5 6 9H2v6h4l5 4V5Z" stroke="currentColor" stroke-width="2" fill="none" stroke-linejoin="round"/><path d="M19 8a6 6 0 0 1 0 8M16 10a3 3 0 0 1 0 4" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+            <span>พูด</span>
+          </button>
+          <button type="button" id="btn-undo" class="btn btn-secondary">
+            <span>ลบคำล่าสุด</span>
+          </button>
+          <button type="button" id="btn-clear" class="btn btn-secondary">
+            <span>ล้างข้อความ</span>
+          </button>
+          <button type="button" id="btn-ai-arrange" class="btn btn-ai">
+            <svg viewBox="0 0 24 24" class="btn-icon"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+            <span>AI จัดเรียงประโยค</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="category-tabs" id="category-tabs" role="tablist" style="display:none">
+        <button class="tab-btn active" data-cat="needs" role="tab" aria-selected="true">ความต้องการ</button>
+        <button class="tab-btn" data-cat="health" role="tab" aria-selected="false">สุขภาพ</button>
+        <button class="tab-btn" data-cat="emergency" role="tab" aria-selected="false">ฉุกเฉิน</button>
+        <button class="tab-btn" data-cat="feelings" role="tab" aria-selected="false">ความรู้สึก</button>
+        <button class="tab-btn" data-cat="family" role="tab" aria-selected="false">ครอบครัว</button>
+        <button class="tab-btn" data-cat="short" role="tab" aria-selected="false">คำตอบสั้น</button>
+      </div>
+
+      <!-- ===== หน้าเลือกหมวดด้วยสายตา ===== -->
+      <section id="category-screen" class="category-screen">
+        <h3 class="category-title">เลือกหมวดหมู่ด้วยสายตา</h3>
+
+        <div class="category-grid">
+          <button type="button" class="category-btn" data-cat="needs">ความต้องการ</button>
+          <button type="button" class="category-btn" data-cat="health">สุขภาพ</button>
+          <button type="button" class="category-btn" data-cat="emergency">ฉุกเฉิน</button>
+          <button type="button" class="category-btn" data-cat="feelings">ความรู้สึก</button>
+          <button type="button" class="category-btn" data-cat="family">ครอบครัว</button>
+          <button type="button" class="category-btn" data-cat="short">คำตอบสั้น</button>
+        </div>
+        <button
+        type="button"
+        id="btn-manage-vocabulary"
+        class="btn btn-secondary">
+        ⚙ จัดการคำศัพท์
+        </button>
+
+        <p class="category-hint">
+          มองหมวดที่ต้องการแล้วกระพริบตาเพื่อเลือก
+        </p>
+      </section>
+    <section id="vocabulary-screen" class="vocabulary-screen" style="display:none;">
+
+  <div class="vocabulary-header">
+    <h3>จัดการคำศัพท์ของฉัน</h3>
+
+    <button
+      type="button"
+      id="btn-back-vocabulary"
+      class="btn btn-secondary">
+      ← กลับไปเลือกหมวด
+    </button>
+  </div>
+
+  <div class="vocabulary-form">
+
+    <label for="custom-category-name">ชื่อหมวดหมู่</label>
+    <input
+      type="text"
+      id="custom-category-name"
+      placeholder="เช่น การเรียน">
+
+    <label for="custom-word-input">เพิ่มคำศัพท์</label>
+
+    <div class="vocabulary-add-row">
+      <input
+        type="text"
+        id="custom-word-input"
+        placeholder="เช่น เปิดคอม">
+
+      <button
+        type="button"
+        id="btn-add-custom-word"
+        class="btn btn-secondary">
+        + เพิ่มคำ
+      </button>
+    </div>
+
+    <div id="custom-word-list" class="custom-word-list"></div>
+
+    <button
+      type="button"
+      id="btn-save-custom-category"
+      class="btn btn-primary">
+      บันทึกหมวดหมู่
+    </button>
+
+  </div>
+
+  <div class="saved-custom-categories">
+    <h3>หมวดหมู่ที่สร้างไว้</h3>
+    <div id="custom-category-list"></div>
+  </div>
+
+</section>
+      <!-- ===== หน้าคำ ===== -->
+      <div id="word-screen" class="word-screen" style="display:none;">
+
+        <div class="word-grid" id="word-grid"></div>
+
+        <div class="finish-area">
+          <p class="finish-hint">
+            เลือกคำครบแล้วให้มองและกระพริบที่ปุ่มนี้
+          </p>
+
+          <button
+              type="button"
+              id="btn-finish"
+              class="btn btn-finish">
+              ✅ เสร็จสิ้น
+          </button>
+
+          <button
+              type="button"
+              id="btn-back-category"
+              class="btn btn-secondary">
+              ⬅ กลับเลือกหมวด
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ===== RIGHT SIDEBAR ===== -->
+    <aside class="panel panel-side">
+
+      <div class="card camera-card">
+        <h3 class="card-title">กล้อง</h3>
+        <div class="camera-frame">
+          <video
+           id="webcam"
+           autoplay
+           playsinline
+          muted>
+          </video>
+          <div class="camera-frame-corner tl"></div>
+          <div class="camera-frame-corner tr"></div>
+          <div class="camera-frame-corner bl"></div>
+          <div class="camera-frame-corner br"></div>
+          <p id="camera-fallback" class="camera-fallback">ไม่พบสัญญาณกล้อง</p>
+        </div>
+      </div>
+
+      <div class="card tracking-card">
+        <h3 class="card-title">Eye Tracking Status</h3>
+        <dl class="tracking-list">
+          <div class="tracking-row">
+            <dt>Direction</dt>
+            <dd id="eye-direction">CENTER</dd>
+          </div>
+          <div class="tracking-row">
+            <dt>Blink</dt>
+            <dd id="blink-count">0</dd>
+          </div>
+          <div class="tracking-row">
+            <dt>Eye Detected</dt>
+            <dd id="eye-detected" class="eye-detected-yes">YES</dd>
+          </div>
+        </dl>
+        <div class="direction-compass" aria-hidden="true">
+          <span class="compass-arrow" id="compass-arrow">●</span>
+        </div>
+      </div>
+
+      <div class="card sos-card">
+        <button type="button" id="sos-btn" class="sos-btn">
+          <span class="sos-ripple"></span>
+          <span class="sos-label">SOS</span>
+        </button>
+      </div>
+
+      <div class="card history-card">
+        <h3 class="card-title">ประวัติข้อความ</h3>
+        <ul id="history-list" class="history-list">
+          <li class="history-empty">ยังไม่มีประวัติข้อความ</li>
+        </ul>
+      </div>
+
+    </aside>
+  </div>
+</main>
+
+<!-- ============================================================ -->
+<!-- SOS CONFIRM MODAL                                             -->
+<!-- ============================================================ -->
+<div id="sos-modal" class="modal-overlay" aria-hidden="true">
+  <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="sos-modal-title">
+    <h3 id="sos-modal-title">ยืนยันส่ง SOS ?</h3>
+    <p>ระบบจะแจ้งเตือนผู้ดูแลและเจ้าหน้าที่ทันที</p>
+    <div class="modal-actions">
+      <button type="button" id="sos-confirm-yes" class="btn btn-danger">Yes</button>
+      <button type="button" id="sos-confirm-no" class="btn btn-secondary">No</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SOS SUCCESS OVERLAY                                           -->
+<!-- ============================================================ -->
+<div id="sos-success" class="sos-success-overlay" aria-hidden="true">
+  <div class="sos-success-pulse"></div>
+  <svg class="sos-success-check" viewBox="0 0 52 52" aria-hidden="true">
+    <circle cx="26" cy="26" r="24" fill="none" stroke="currentColor" stroke-width="2.5"/>
+    <path fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" d="M14 27l8 8 16-16"/>
+  </svg>
+  <p>ส่งสัญญาณสำเร็จ</p>
+</div>
+
+<script src="script.js"></script>
+<script type="module" src="browserEye.js"></script>
+</body>
+</html>
