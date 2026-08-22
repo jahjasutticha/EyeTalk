@@ -61,6 +61,8 @@ video: {
 audio: false
 });
     video.srcObject = stream;
+    await video.play();
+    document.querySelector("#camera-fallback")?.classList.add("hidden");
 
     cameraStarted = true;
 

@@ -131,11 +131,6 @@ document.addEventListener("DOMContentLoaded", () => {
     state.words = [];
     renderMessage();
     loadHistory();
-    // กล้องถูกเปิดโดย eyePos.py อยู่แล้ว
-// จึงไม่เปิดซ้ำจาก Browser
-$("#camera-fallback").textContent = "กล้องกำลังทำงานผ่านระบบ Eye Tracking";
-$("#status-camera").classList.add("online");
-
 if (window.startBrowserCamera) {
   window.startBrowserCamera();
 }
@@ -454,18 +449,6 @@ function renderPredictions() {
     });
   }
 
-  async function startCamera() {
-    const fallback = $("#camera-fallback");
-    try {
-      state.cameraStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" }, audio: false });
-      $("#webcam").srcObject = state.cameraStream;
-      fallback.classList.add("hidden");
-      $("#status-camera").classList.add("online");
-    } catch {
-      fallback.classList.remove("hidden");
-      $("#status-camera").classList.remove("online");
-    }
-  }
 
   function stopDashboard() {
     clearInterval(state.eyeTimer);
